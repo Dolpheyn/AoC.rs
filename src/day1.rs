@@ -76,6 +76,6 @@ mod tests {
     #[test]
     fn day1_part2_works() {
         let input = get_input_from_file();
-        assert_eq!(part2(&input), 0);
+        assert_eq!(part2(&input), 165026160);
     }
 }
