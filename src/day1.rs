@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-pub fn parse_input(input: &str) -> Vec<&str> {
+fn parse_input(input: &str) -> Vec<&str> {
     let input = input.trim_end().split("\n").collect::<Vec<_>>();
     input
 }
