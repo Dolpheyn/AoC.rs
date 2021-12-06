@@ -1,6 +1,3 @@
-use std::fs;
-use std::path::Path;
-
 fn parse_input(input: &str) -> Vec<&str> {
     let input = input.trim_end().split("\n").collect::<Vec<_>>();
     input
@@ -43,6 +40,9 @@ pub fn part2(input: &str) -> i64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::fs;
+    use std::path::Path;
+
     const SAMPLE: &str = "1721
 979
 366
