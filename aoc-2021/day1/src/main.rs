@@ -16,7 +16,8 @@ fn solve_1(input: &str) {
         .as_slice()
         .windows(2)
         .map(|pair| pair[1] > pair[0])
-        .fold(0, |acc, x| if x { acc + 1 } else { acc });
+        .filter(|b| *b)
+        .count();
 
     println!("{}", n_increase);
     assert_eq!(n_increase, 1583);
