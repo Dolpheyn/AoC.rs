@@ -13,7 +13,6 @@ fn main() -> Result<()> {
 fn solve_1(input: &str) {
     let input = parse_input(input);
     let n_increase = input
-        .as_slice()
         .windows(2)
         .map(|pair| pair[1] > pair[0])
         .filter(|b| *b)
@@ -21,37 +20,26 @@ fn solve_1(input: &str) {
 
     println!("{}", n_increase);
     assert_eq!(n_increase, 1583);
-
 }
 
 fn solve_2(input: &str) {
     let input = parse_input(input);
 
+    let sums = input
+        .windows(3)
+        .map(|w| w.iter().sum())
+        .collect::<Vec<u32>>();
 
-    let mut prev_sum: Option<u32> = None;
-    let mut n_increase = 0;
-    for depths in input.windows(3) {
-        let sum: u32 = depths.iter().sum();
-        match prev_sum {
-            None => {
-                prev_sum = sum.into();
-            },
-            Some(s) => {
-                if sum > s {
-                    n_increase += 1;
-                }
-                prev_sum = sum.into();
-            }
-        }
-    }
+    let n_increase = sums
+        .windows(2)
+        .map(|pair| pair[1] > pair[0])
+        .filter(|b| *b)
+        .count();
 
     println!("{}", n_increase);
     assert_eq!(n_increase, 1627);
 }
 
 fn parse_input(input: &str) -> Vec<u32> {
-    input
-        .lines()
-        .map(|l| l.parse::<u32>().unwrap())
-        .collect()
+    input.lines().map(|l| l.parse::<u32>().unwrap()).collect()
 }
