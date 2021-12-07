@@ -12,24 +12,15 @@ fn main() -> Result<()> {
 
 fn solve_1(input: &str) {
     let input = parse_input(input);
-
-    let mut prev_depth : Option<u32> = None;
-    let mut n_increase = 0;
-    for &depth in input.iter().skip(1) {
-        match prev_depth {
-            None => {
-                prev_depth = depth.into();
-            },
-            Some(d) => {
-                if depth > d {
-                    n_increase += 1;
-                }
-                prev_depth = depth.into();
-            }
-        }
-    }
+    let n_increase = input
+        .as_slice()
+        .windows(2)
+        .map(|pair| pair[1] > pair[0])
+        .fold(0, |acc, x| if x { acc + 1 } else { acc });
 
     println!("{}", n_increase);
+    assert_eq!(n_increase, 1583);
+
 }
 
 fn solve_2(input: &str) {
@@ -54,6 +45,7 @@ fn solve_2(input: &str) {
     }
 
     println!("{}", n_increase);
+    assert_eq!(n_increase, 1627);
 }
 
 fn parse_input(input: &str) -> Vec<u32> {
