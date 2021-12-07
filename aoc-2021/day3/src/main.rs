@@ -51,23 +51,54 @@ fn solve_1(input: &str) {
 fn solve_2(input: &str) {
     let input = parse_input(input);
 
-    let n_row = input.len();
     let n_col = input[0].len();
-    let transposed = transpose_input(&input, n_row, n_col);
 
-    let oxygens = Vec::new();
-    let co2s = Vec::new();
-    for i in 0..n_col {
-        let ptr = i * n_row;
-        let bits = &transposed[ptr..ptr+n_row];
+    let mut oxygens = input.clone();
+    let mut co2s = input.clone();
+    let mut oxygen_filter = String::new();
+    let mut co2_filter = String::new();
 
-        let bit_1_count: u32 = bits.iter().sum();
-        let bit_0_count: u32 = (bit_1_count as i32 - n_row as i32).abs() as u32;
+    for c in 0..n_col {
+        let oxygens_transposed = transpose_input(&oxygens, oxygens.len(), n_col);
+        let co2s_transposed = transpose_input(&co2s, co2s.len(), n_col);
 
-        let (most_common_bit, least_common_bit) = if bit_1_count > bit_0_count { ('1', '0') } else { ('0', '1') };
+        if oxygens.len() != 1 {
+            let output = solve_2_inner(&oxygens_transposed, &oxygens, &oxygen_filter, "oxygen", c);
+            oxygen_filter = output.0;
+            oxygens = output.1;
+        }
 
-        // TODO: how to filter from str in input according to character in nth column?
+        if co2s.len() != 1 {
+            let output = solve_2_inner(&co2s_transposed, &co2s, &co2_filter, "co2", c);
+            co2_filter = output.0;
+            co2s = output.1;
+        }
     }
+
+    let o = usize::from_str_radix(&oxygens.first().unwrap(), 2).unwrap();
+    let c = usize::from_str_radix(&co2s.first().unwrap(), 2).unwrap();
+    println!("{}", o * c);
+}
+
+
+fn solve_2_inner<'a>(transposed: &[u32], rest: &Vec<&'a str>, filter: &String, detect: &str, column: usize) -> (String, Vec<&'a str>) {
+    let mut filter = filter.clone();
+    let mut rest = rest.clone();
+
+    let ptr = column * rest.len();
+    let column_bits= &transposed[ptr..ptr + rest.len()];
+    let bit_1_count: u32 = column_bits.iter().sum();
+    let bit_0_count: u32 = (bit_1_count as i32 - rest.len() as i32).abs() as u32;
+
+    let (most_common_bit, least_common_bit) = if bit_1_count < bit_0_count { ('0', '1') } else { ('1', '0') };
+    if detect == "oxygen" {
+        filter.push(most_common_bit);
+    } else {
+        filter.push(least_common_bit);
+    }
+    rest = rest.iter().filter(|bin| bin.starts_with(&filter)).map(|s| *s).collect();
+
+    (filter, rest)
 }
 
 fn transpose_input(input: &Vec<&str>, n_row: usize, n_col: usize) -> Vec<u32> { 
