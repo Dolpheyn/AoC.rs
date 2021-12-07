@@ -24,9 +24,15 @@ fn solve_1(input: &str) {
     let mut x = 0;
     for command in input {
         match command {
-            Command::Forward(n) => { x += n; }
-            Command::Down(n) => { y += n; }
-            Command::Up(n) => { y -= n; }
+            Command::Forward(n) => {
+                x += n;
+            }
+            Command::Down(n) => {
+                y += n;
+            }
+            Command::Up(n) => {
+                y -= n;
+            }
         }
     }
 
@@ -41,8 +47,8 @@ fn solve_2(input: &str) {
     let mut y = 0;
     for command in input {
         match command {
-            Command::Up(n) => { aim -= n },
-            Command::Down(n) => { aim += n },
+            Command::Up(n) => aim -= n,
+            Command::Down(n) => aim += n,
             Command::Forward(n) => {
                 x += n;
                 y += n * aim;
@@ -67,8 +73,7 @@ impl Into<Command> for [&str; 2] {
             ["forward", n] => Command::Forward(n.parse().unwrap()),
             ["down", n] => Command::Down(n.parse().unwrap()),
             ["up", n] => Command::Up(n.parse().unwrap()),
-            _ => panic!("wut")
+            _ => panic!("wut"),
         }
     }
-
 }
